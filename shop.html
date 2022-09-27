@@ -1,19 +1,26 @@
 <script>
-var shop = [
+var shop = new Array(3);
+shop[0] = [
 	{"item":"Apple","price":6.00},
 	{"item":"Banana","price":2.00},
 	{"item":"Orange","price":1.00}
 ]
+shop[1] = [
+	{"item":"Plate","price":10.00},
+	{"item":"Spoon","price":5.00},
+	{"item":"Bowl","price":3.00}
+];
+shop[2] = [
+	{"item":"Dress","price":16.00},
+	{"item":"Knicker","price":10.00},
+	{"item":"T-Shirt","price":10.00}
+];
 var cart = [];
+var section;
 var userinput;
 function startApp(){
-	var list = '';
-	for(i=0;i<shop.length;i++){
-		list += `${i}. ${shop[i].item} - ₵${shop[i].price}\n`;
-	}
-	userinput = prompt(`Welcome to My Shop!\nWhat would you like to buy?\n${list}\n\nPress 12 to list cart`);
-	if(!isNaN(userinput)) {
-		if(userinput == 12){
+	section = prompt(`Welcome to My Shop!\nWhat section would you like to browse?\n0. Fruits\n1. Utensils\n2. Apparels\n\nEnter 12 to list cart`);
+	if(!isNaN(section)) {if(section == 12){
 			if(cart.length > 0){
 				var myCart = '';
 				var totalPrice;
@@ -35,26 +42,45 @@ function startApp(){
 				startApp();
 			}
 		}else{
-			var selected = shop[userinput];
-			userinput = prompt('How many '+selected.item+'s would you like to buy');
-			if(!isNaN(userinput)){
-				var quantity = userinput;
-				var price = (selected.price*quantity);
-				addToCart = confirm('Okay that will be ₵'+price+'\n Add to cart?');
-				if(addToCart){
-					cart.push({"item":selected.item,"price":price});
-					alert(selected.item+' of ₵'+price+' added to cart');
-					startApp();
+			if(shop[section].length > 0){
+				var list = '';
+				for(i=0;i<shop[section].length;i++){
+					list += `${i}. ${shop[section][i].item} - ₵${shop[section][i].price}\n`;
+				}
+				userinput = prompt(`Welcome to My Shop!\nWhat would you like to buy?\n${list}\n\nEnter 13 to go back`);
+				if(!isNaN(userinput)) {
+					if(userinput == 13){
+						startApp();
+					}else{
+						var selected = shop[section][userinput];
+						userinput = prompt('How many '+selected.item+'s would you like to buy');
+						if(!isNaN(userinput)){
+							var quantity = userinput;
+							var price = (selected.price*quantity);
+							addToCart = confirm('Okay that will be ₵'+price+'\n Add to cart?');
+							if(addToCart){
+								cart.push({"item":selected.item,"price":price});
+								alert(selected.item+' of ₵'+price+' added to cart');
+								startApp();
+							}else{
+								startApp();
+							}
+						}else{
+							alert("Please a number");
+							startApp();
+						}
+					}
 				}else{
+					alert("Please Enter Item number");
 					startApp();
 				}
 			}else{
-				alert("Please a number");
+				alert("No Items available in this section");
 				startApp();
 			}
 		}
 	}else{
-		alert("Please Enter Item number");
+		alert("Please Enter Section number");
 		startApp();
 	}
 }
